@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">AnimaRol</string>
+    <string name="WIP">Work In Progress</string>
+    <string name="TS_MasterButton">Master</string>
+    <string name="TS_PlayerButton">Player</string>
+    <string name="MM_AddPlayer">Add new Entity</string>
+    <string name="MM_ModifyPlayer">Modify Entity</string>
+    <string name="MM_StartSession">Start New Session</string>
+    <string name="PM_AddPlayer">Create a new Player</string>
+    <string name="PM_SearchSession">Search Session</string>
+    <string name="ECF_Title">Entity Creator</string>
+    <string name="ECF_Name">Name</string>
+    <string name="ECF_Category">Category</string>
+    <string name="ECF_Level">Level</string>
+    <string name="ECF_Health">Base Health</string>
+    <string name="ECF_TotalHealth">Total Health</string>
+    <string name="ECF_Strength">Strength</string>
+    <string name="ECF_Agility">Agility</string>
+    <string name="ECF_Constitution">Constitution</string>
+    <string name="ECF_Dexterity">Dexterity</string>
+    <string name="ECF_Weapon">Weapon</string>
+    <string name="ECF_Armor">Armor</string>
+    <string name="ECF_Attack">Attack</string>
+    <string name="ECF_Defense">Defense</string>
+    <string name="ECF_ButtonSaveEntity">Save Entity</string>
+    <string name="MES_Title">Select Enemy To Modify</string>
+    <string name="PCS_Name">Player name</string>
+    <string name="PCS_Warrior">Warrior</string>
+    <string name="PCS_Mage">Mage</string>
+    <string name="PCS_Assassin">Assassin</string>
+</resources>
