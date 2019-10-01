@@ -3,18 +3,23 @@ package com.example.animarol;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.SocketKeepalive;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 
 public class PlayerSessionSelector extends AppCompatActivity {
@@ -25,6 +30,7 @@ public class PlayerSessionSelector extends AppCompatActivity {
     ArrayList<PlayerEntity> playersDataRecovered;
     PlayerEntity playerSelected;
     Spinner playerSelectedSpinner;
+    EditText IPEditText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +44,8 @@ public class PlayerSessionSelector extends AppCompatActivity {
         playerContainerLayout = (LinearLayout) findViewById(R.id.MESEnemyContainer);
         // Creando la referencia del spinner.
         playerSelectedSpinner = (Spinner)findViewById(R.id.PSS_PlayerSelector);
+        //Obteniendo el campo donde se introduce la ip
+        IPEditText = (EditText) findViewById(R.id.PSS_IPEditText);
 
     }
 
@@ -66,7 +74,6 @@ public class PlayerSessionSelector extends AppCompatActivity {
                 GetPlayersData(listPlayersFiles);
             }
         }
-
     }
 
     // Coge los datos de todos los personajes del jugador y los almacena en un array.
@@ -95,7 +102,26 @@ public class PlayerSessionSelector extends AppCompatActivity {
     }
 
     // Busca mediante un hilo todas las sesiones que han sido abiertas por un master, y las muestra en la app con un boton
-    private void GetOpenSessions(){
-        // TODO crear la deteccion de los servidores de master.
+    public void ConnectButton(View view){
+        ClientSocket clientSocket = new ClientSocket();
+        clientSocket.execute(IPEditText.getText().toString());
+    }
+
+    class ClientSocket extends AsyncTask<String,Void,String>{
+        Socket clientSocket;
+        String ip;
+
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                ip = params[0];
+                clientSocket = new Socket(ip,9700);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
     }
 }
+

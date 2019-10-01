@@ -28,4 +28,6 @@
     <string name="PCS_Warrior">Warrior</string>
     <string name="PCS_Mage">Mage</string>
     <string name="PCS_Assassin">Assassin</string>
+    <string name="PSS_ConnectButton">Connect</string>
+    <string name="PSS_IPTextView">Enter IP MASTER</string>
 </resources>

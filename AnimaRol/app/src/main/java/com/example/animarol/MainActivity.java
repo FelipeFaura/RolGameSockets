@@ -47,11 +47,14 @@ public class MainActivity extends AppCompatActivity {
         };
         File dir = new File("/data/data/com.example.animarol/files");
         String[] list = dir.list(filter);
-        for (int c=0; c < list.length;c++){
-            Log.d("CleanFilesTEST", "Se va a borrar");
-            Log.d("CleanFilesTEST", list[c]);
-            deleteFile(list[c]);
+        if (list != null){
+            for (int c=0; c < list.length;c++){
+                Log.d("CleanFilesTEST", "Se va a borrar");
+                Log.d("CleanFilesTEST", list[c]);
+                deleteFile(list[c]);
+            }
         }
+
     }
 
 // **************Buttons*****************

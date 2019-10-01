@@ -37,6 +37,7 @@
             android:id="@+id/PCS_Assassin"
             android:layout_width="match_parent"
             android:layout_height="206dp"
+            android:onClick="CreateNewSessionButton"
             android:text="@string/MM_StartSession" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
