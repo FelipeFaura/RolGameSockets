@@ -5,30 +5,54 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.format.Formatter;
+import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.w3c.dom.Text;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class MasterSessionConnect extends AppCompatActivity {
+    public ArrayList<ServerThread> playersConnectedList;
+    public ArrayList<TextView> playerConnectedLabelList;
+    LinearLayout playersLayout;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_master_session_connect);
-        Thread serverThread = new Thread(new ServerSocketConection());
-        serverThread.start();
-        TextView ipTextView = (TextView) findViewById(R.id.MSC_IPTextView);
-        String finalIP = "IP MASTER: "+IPDetector();
-        ipTextView.setText(finalIP);
+        playersConnectedList = new ArrayList<ServerThread>();
+        playerConnectedLabelList = new ArrayList<TextView>();
+        StartServer();
+        StartUIComponents();
 
+
+    }
+
+    private void StartUIComponents() {
+        // Obtención de la IP del master para que pueda indicarla a los jugadores.
+        TextView ipTextView = (TextView) findViewById(R.id.MSC_IPTextView);
+        String finalIP = "IP MASTER: "+ IPDetector(); // método de detección de la ip, asignandola a la variable final.
+        ipTextView.setText(finalIP);
+        // Obtención del layout donde añadiremos los jugadores conectados.
+        playersLayout = (LinearLayout) findViewById(R.id.MSC_PlayersConectedLayout);
+    }
+
+
+    private void StartServer() {
+        // Comienzo del hilo del servidor para que acepte a los usuarios.
+        Thread serverThread = new Thread(new ServerSocketConnection());
+        serverThread.start();
     }
 
 
@@ -39,40 +63,70 @@ public class MasterSessionConnect extends AppCompatActivity {
         return ip;
     }
 
+    public void AddPlayerConnected(String playerName){
+        //playersConnectedList.add(playerName);
+        // creación de la representación del jugador conectado
+        //TextView playerNameTextView = new TextView(this);
+        //playerNameTextView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        //playerNameTextView.setText(playerName);
+        //playersLayout.addView(playerNameTextView);
+        //playerConnectedLabelList.add(playerNameTextView);
+
+    }
+
+    public void StartGameSessionButton (View view){
+
+    }
+
     // Socket de conexión esta es la parte del servidor.
-    public class  ServerSocketConection implements Runnable {
+    public class ServerSocketConnection implements Runnable {
         ServerSocket serverSocket;
-        Socket socket;
-        DataInputStream DIS;
-        DataOutputStream DOS;
-        String  message = "te has conectado";
+        String  message = "Mensaje Por Defecto";
         Handler handler = new Handler();
+        int idPlayer = 0;
 
 
         @Override
         public void run() {
+
             try {
                 serverSocket = new ServerSocket(9700);
                 while (true) {
+                    Socket socket;
                     socket = serverSocket.accept();
-                    //DIS = new DataInputStream(socket.getInputStream());
-                    //message = DIS.readUTF();
+                    ServerThread serverThread = new ServerThread(socket,idPlayer);
+                    idPlayer++;
                     postHandler();
+                    serverThread.execute();
 
                 }
 
             }catch (Exception e){
-
+                Log.d("ConexionERROR", e.toString() );
 
             }
 
+        }
+
+        public void SendMessageToAll(){ /*
+            for (int c=0; c<=socketList.size(); c++){
+                try {
+                    DOS = new DataOutputStream(socketList.get(c).getOutputStream());
+                    DOS.writeUTF("MensajeTest");
+                    DOS.writeUTF("Hola Soy el Servidor");
+                    DOS.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } */
         }
 
         private void postHandler (){
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(getApplicationContext(), "Client Connected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Client Connected: " + message, Toast.LENGTH_SHORT).show();
+                    //AddPlayerConnected(message);
                 }
             });
         }

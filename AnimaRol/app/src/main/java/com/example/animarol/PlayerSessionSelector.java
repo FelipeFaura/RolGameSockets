@@ -13,7 +13,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FilenameFilter;
@@ -35,6 +38,7 @@ public class PlayerSessionSelector extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_session_selector);
+        playersDataRecovered = new ArrayList<PlayerEntity>();
         startComponents();
         GetPlayersSearch();
     }
@@ -103,25 +107,11 @@ public class PlayerSessionSelector extends AppCompatActivity {
 
     // Busca mediante un hilo todas las sesiones que han sido abiertas por un master, y las muestra en la app con un boton
     public void ConnectButton(View view){
-        ClientSocket clientSocket = new ClientSocket();
-        clientSocket.execute(IPEditText.getText().toString());
+        //TODO Orden de conexion, 1) encontrar el archivo de player 2) Enviarlo al hilo junto con los demás 3)Ejecutar el hilo conectandose al socket
+        PlayerThread playerThread = new PlayerThread();
+        playerThread.execute(IPEditText.getText().toString(),playerSelectedSpinner.getSelectedItem().toString());
+
     }
 
-    class ClientSocket extends AsyncTask<String,Void,String>{
-        Socket clientSocket;
-        String ip;
-
-
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-                ip = params[0];
-                clientSocket = new Socket(ip,9700);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-    }
 }
 
