@@ -21,9 +21,10 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class MasterSessionConnect extends AppCompatActivity {
-    public ArrayList<ServerThread> playersConnectedList;
+    public static ArrayList<ServerThread> playersConnectedList;
     public ArrayList<TextView> playerConnectedLabelList;
     LinearLayout playersLayout;
+    AsyncTest test;
 
 
 
@@ -63,8 +64,8 @@ public class MasterSessionConnect extends AppCompatActivity {
         return ip;
     }
 
-    public void AddPlayerConnected(String playerName){
-        //playersConnectedList.add(playerName);
+    public void AddPlayerConnected(ServerThread playerSocketConnected){
+        playersConnectedList.add(playerSocketConnected);
         // creación de la representación del jugador conectado
         //TextView playerNameTextView = new TextView(this);
         //playerNameTextView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -75,16 +76,24 @@ public class MasterSessionConnect extends AppCompatActivity {
     }
 
     public void StartGameSessionButton (View view){
-
+        /*int number = 0;
+        for (int c = 0; c <= playersConnectedList.size() ;c++){
+            Log.d("Comprobando conectados", "StartGameSessionButton: " +number++);
+        }
+        for (int c = 0; c <= playersConnectedList.size() ;c++){
+            playersConnectedList.get(c).ServerHelloAll();
+        }*/
+        AsyncTest.serverAction = AsyncTest.ServerActions.Hello;
     }
 
     // Socket de conexión esta es la parte del servidor.
     public class ServerSocketConnection implements Runnable {
         ServerSocket serverSocket;
+        ServerThread serverThread;
         String  message = "Mensaje Por Defecto";
         Handler handler = new Handler();
         int idPlayer = 0;
-
+        Socket socket;
 
         @Override
         public void run() {
@@ -92,12 +101,14 @@ public class MasterSessionConnect extends AppCompatActivity {
             try {
                 serverSocket = new ServerSocket(9700);
                 while (true) {
-                    Socket socket;
+
                     socket = serverSocket.accept();
-                    ServerThread serverThread = new ServerThread(socket,idPlayer);
-                    idPlayer++;
+                    test = new AsyncTest();
+                    serverThread = new ServerThread(socket,idPlayer);
                     postHandler();
-                    serverThread.execute();
+                    idPlayer++;
+                    serverThread.start();
+
 
                 }
 
@@ -125,8 +136,8 @@ public class MasterSessionConnect extends AppCompatActivity {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(getApplicationContext(), "Client Connected: " + message, Toast.LENGTH_SHORT).show();
-                    //AddPlayerConnected(message);
+                    Toast.makeText(getApplicationContext(), "ID Conectado " + idPlayer, Toast.LENGTH_SHORT).show();
+                    AddPlayerConnected(serverThread);
                 }
             });
         }

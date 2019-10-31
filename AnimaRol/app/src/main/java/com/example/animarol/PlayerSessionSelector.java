@@ -108,8 +108,8 @@ public class PlayerSessionSelector extends AppCompatActivity {
     // Busca mediante un hilo todas las sesiones que han sido abiertas por un master, y las muestra en la app con un boton
     public void ConnectButton(View view){
         //TODO Orden de conexion, 1) encontrar el archivo de player 2) Enviarlo al hilo junto con los demás 3)Ejecutar el hilo conectandose al socket
-        PlayerThread playerThread = new PlayerThread();
-        playerThread.execute(IPEditText.getText().toString(),playerSelectedSpinner.getSelectedItem().toString());
+        PlayerThread playerThread = new PlayerThread(IPEditText.getText().toString(),playerSelectedSpinner.getSelectedItem().toString());
+        playerThread.start();
 
     }
 
