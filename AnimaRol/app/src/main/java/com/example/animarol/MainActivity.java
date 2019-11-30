@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         // FIX no se porque no se eliminan los archivos que se realizaron en las pruebas así que se borrarán todos los archivos en la primera instalación de la app.
         if(!prefs.getBoolean("firstTime", false)) {
             Log.d("CleanFilesTEST", "Nunca se ha ejecutado este codigo Se acaba de instalar");
-            // run your one time code here
+            // Codigo que será ejecutado una sola vez
             CleanFilesOnFirstInstall();
             SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean("firstTime", true);

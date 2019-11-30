@@ -33,6 +33,7 @@ public class EnemyEntity implements Serializable {
         this.attack = attack;
         this.defense = defense;
     }
+
     public void ShowEnemyData(){
         Log.d("DATACLASSENEMY", this.category);
         Log.d("DATACLASSENEMY", this.name);
